@@ -39,7 +39,7 @@ void ofApp::draw(){
 }
 
 
-void ofApp::keyPressed(int key){
+void ofApp::keyPressed(const int key){
 	if(key == ' '){
 		items.clear();
 	}else if(key == 'z'){
@@ -52,16 +52,16 @@ void ofApp::keyPressed(int key){
 }
 
 
-void ofApp::mousePressed(int x, int y, int button){
+void ofApp::mousePressed(const int x, const int y, const int button){
 	pressed = true;
 }
 
 
-void ofApp::mouseReleased(int x, int y, int button){
+void ofApp::mouseReleased(const int x, const int y, const int button){
 	pressed = false;
 }
 
 
-void ofApp::windowResized(int w, int h){
+void ofApp::windowResized(const int w, const int h){
 	box2d.createGround();
 }

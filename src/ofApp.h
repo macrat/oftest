@@ -17,14 +17,14 @@ class ofApp : public ofBaseApp{
 		bool pressed;
 
 	public:
-		void setup();
-		void update();
-		void draw();
+		void setup() override;
+		void update() override;
+		void draw() override;
 
-		void keyPressed(int key);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
+		void keyPressed(const int key) override;
+		void mousePressed(const int x, const int y, const int button) override;
+		void mouseReleased(const int x, const int y, const int button) override;
+		void windowResized(const int w, const int h) override;
 };
 
 
