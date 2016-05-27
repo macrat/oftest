@@ -54,9 +54,7 @@ public:
 	}
 
 	void draw() override {
-		ofSetColor(color);
-		const float w = ofxBox2dRect::getWidth(), h = ofxBox2dRect::getHeight();
-		ofDrawRectangle(ofxBox2dRect::getPosition() - ofVec3f(w/2, h/2), w, h);
+		ofxBox2dRect::draw();
 	}
 };
 
