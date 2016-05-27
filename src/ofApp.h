@@ -6,6 +6,7 @@
 
 #include <ofMain.h>
 #include <ofxBox2d.h>
+#include <ofxCv.h>
 
 #include "item.h"
 
@@ -15,6 +16,15 @@ class ofApp : public ofBaseApp{
 		ofxBox2d box2d;
 		std::vector< std::shared_ptr<Item> > items;
 		bool pressed;
+
+		ofColor bgColor;
+
+		ofVideoGrabber cam;
+		ofImage img;
+
+		static void makeColor(ofColor& c) {
+			c.set(ofRandom(100, 200), 100, ofRandom(220, 255));
+		}
 
 	public:
 		void setup() override;
