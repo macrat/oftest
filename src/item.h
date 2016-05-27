@@ -7,15 +7,22 @@
 #include <ofxBox2d.h>
 
 
-class Item {
+class Item : public ofxBox2dBaseShape {
 protected:
 	const ofColor color;
+	const float removeRadius;
 
 public:
-	Item(ofxBox2d& box2d, const int x, const int y, const float r) : color(ofRandom(50, 150), 0, ofRandom(200, 255)) { }
+	Item(const float removeRadius) : color(ofRandom(50, 150), 0, ofRandom(200, 255)), removeRadius(removeRadius) { }
+
+	virtual ~Item() { }
 
 	virtual void draw() = 0;
-	virtual bool shouldRemove() = 0; 
+
+	virtual bool shouldRemove() {
+		const auto pos = getPosition();
+		return pos.x < -removeRadius || ofGetWidth() + removeRadius < pos.x || ofGetHeight() + removeRadius < pos.y;
+	}
 
 
 	static std::shared_ptr<Item> generate(ofxBox2d& box2d, const int x, const int y, const float size);
@@ -24,40 +31,29 @@ public:
 
 class CircleItem : public Item, public ofxBox2dCircle {
 public:
-	CircleItem(ofxBox2d& box2d, const int x, const int y, const float r) : Item(box2d, x, y, r) {
-		setPhysics(pow(r, 2.0), 0.6, 0.1);
-		setup(box2d.getWorld(), x, y, r);
+	CircleItem(ofxBox2d& box2d, const int x, const int y, const float r) : Item(r) {
+		ofxBox2dCircle::setPhysics(pow(r, 2.0), 0.6, 0.1);
+		ofxBox2dCircle::setup(box2d.getWorld(), x, y, r);
 	}
 
 	void draw() override {
 		ofSetColor(color);
-		ofDrawCircle(getPosition(), getRadius());
-	}
-
-	bool shouldRemove() override {
-		const auto pos = getPosition();
-		const float r = getRadius();
-		return pos.x < -r || ofGetWidth() + r < pos.x || ofGetHeight() + r < pos.y;
+		ofDrawCircle(ofxBox2dCircle::getPosition(), ofxBox2dCircle::getRadius());
 	}
 };
 
 
 class BoxItem : public Item, public ofxBox2dRect {
 public:
-	BoxItem(ofxBox2d& box2d, const int x, const int y, const float size) : Item(box2d, x, y, size) {
-		setPhysics(pow(size, 2.0), 0.6, 0.1);
-		setup(box2d.getWorld(), x, y, size, size);
+	BoxItem(ofxBox2d& box2d, const int x, const int y, const float size) : Item(pow(size, 2.0)) {
+		ofxBox2dRect::setPhysics(pow(size, 2.0), 0.6, 0.1);
+		ofxBox2dRect::setup(box2d.getWorld(), x, y, size, size);
 	}
 
 	void draw() override {
 		ofSetColor(color);
-		ofDrawRectangle(getPosition() - ofVec3f(getWidth()/2, getHeight()/2), getWidth(), getHeight());
-	}
-
-	bool shouldRemove() override {
-		const auto pos = getPosition();
-		const float r = getWidth() * getHeight();
-		return pos.x < -r || ofGetWidth() + r < pos.x || ofGetHeight() + r < pos.y;
+		const float w = ofxBox2dRect::getWidth(), h = ofxBox2dRect::getHeight();
+		ofDrawRectangle(ofxBox2dRect::getPosition() - ofVec3f(w/2, h/2), w, h);
 	}
 };
 
