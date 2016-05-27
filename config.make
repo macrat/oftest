@@ -6,9 +6,8 @@
 ################################################################################
 # OF ROOT
 #   The location of your root openFrameworks installation
-#       (default) OF_ROOT = ../../../Users/ena/Library/OpenFrameworks_v0.9.3 
 ################################################################################
-# OF_ROOT = ../../../Users/ena/Library/OpenFrameworks_v0.9.3
+# OF_ROOT = 
 
 ################################################################################
 # PROJECT ROOT
