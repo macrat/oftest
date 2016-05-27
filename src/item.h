@@ -26,6 +26,9 @@ public:
 
 
 	static std::shared_ptr<Item> generate(ofxBox2d& box2d, const int x, const int y, const float size);
+	static std::shared_ptr<Item> generate(ofxBox2d& box2d, const ofPoint pos, const float size) {
+		return Item::generate(box2d, pos.x, pos.y, size);
+	}
 };
 
 

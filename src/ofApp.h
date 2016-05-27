@@ -21,6 +21,7 @@ class ofApp : public ofBaseApp{
 
 		ofVideoGrabber cam;
 		ofImage img;
+		ofxCv::ObjectFinder finder;
 
 		static void makeColor(ofColor& c) {
 			c.set(ofRandom(100, 200), 100, ofRandom(220, 255));

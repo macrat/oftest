@@ -2,6 +2,9 @@
 
 
 void ofApp::setup(){
+	ofSetVerticalSync(true);
+	ofSetFrameRate(60);
+
 	cam.setup(800, 600);
 
 	box2d.init();
@@ -10,6 +13,9 @@ void ofApp::setup(){
 	box2d.setFPS(60.0);
 
 	makeColor(bgColor);
+
+	finder.setup("haarcascade_frontalface_default.xml");
+	finder.setPreset(ofxCv::ObjectFinder::Fast);
 }
 
 
@@ -33,10 +39,28 @@ void ofApp::update(){
 	box2d.update();
 
 	cam.update();
-	ofxCv::convertColor(cam, img, CV_RGB2GRAY);
-	ofxCv::threshold(img, 60);
-	img.mirror(false, true);
-	img.update();
+	if(cam.isFrameNew()){
+		ofxCv::convertColor(cam, img, CV_RGB2GRAY);
+		ofxCv::threshold(img, 60);
+		img.mirror(false, true);
+		img.update();
+
+		finder.update(cam);
+	}
+
+	for(int i=0; i<finder.size(); i++){
+		const ofRectangle rect(finder.getObjectSmoothed(i));
+		ofPoint pos(rect.getCenter());
+		pos.x = ofGetWidth() - pos.x * ofGetWidth() / cam.getWidth();
+		pos.y *= ofGetHeight() / cam.getHeight();
+		const float r = min(rect.getWidth() * ofGetWidth() / cam.getWidth(), rect.getHeight() * ofGetHeight() / cam.getHeight());
+
+		for(int i=0; i<max(1, (int)r/100); i++){
+			const float a = ofRandom(2*PI);
+			const float l = ofRandom(r/2);
+			items.push_back(Item::generate(box2d, pos + ofPoint(cos(a)*l, sin(a)*l), ofRandom(4, 10)));
+		}
+	}
 }
 
 
