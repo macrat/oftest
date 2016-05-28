@@ -54,6 +54,7 @@ public:
 	}
 
 	void draw() override {
+		ofSetColor(color);
 		ofxBox2dRect::draw();
 	}
 };
